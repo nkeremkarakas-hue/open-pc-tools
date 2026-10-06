@@ -9,6 +9,7 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron .",
+    "test": "node test/security.test.js",
     "build": "electron-builder --dir",
     "dist": "electron-builder"
   },

@@ -3,11 +3,13 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const { execFile } = require('child_process');
+const { securityScan } = require('./security');
 
 const isWin = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
 const isMac = process.platform === 'darwin';
 const dataFile = path.join(app.getPath('userData'), 'apps.json');
+const supportedLocales = new Set(['tr', 'en']);
 
 function createWindow() {
   const win = new BrowserWindow({ width: 1280, height: 820, minWidth: 980, minHeight: 640, backgroundColor: '#0b0f17', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false } });
@@ -58,18 +60,15 @@ function detectApps() {
   }
   return [...new Map([...list, ...readCustomApps()].map(item => [item.id, item])).values()];
 }
-function run(command, args, options = {}) { return new Promise(resolve => execFile(command, args, { timeout: 120000, windowsHide: true, ...options }, (error, stdout, stderr) => resolve({ ok: !error, stdout: stdout || '', stderr: stderr || '', error: error?.message || '' }))); }
-async function securityScan(target) {
-  if (!target || !exists(target)) return { ok: false, status: 'not-found', message: 'Tarama yolu bulunamadı.' };
-  if (isWin) { const result = await run('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', `Start-MpScan -ScanPath ${JSON.stringify(target)} -ScanType CustomScan`]); return { ok: result.ok, status: result.ok ? 'clean-or-complete' : 'error', message: result.ok ? 'Windows Defender taraması tamamlandı.' : result.error }; }
-  if (isLinux) { const clamscan = await run('sh', ['-c', 'command -v clamscan']); if (!clamscan.ok) return { ok: false, status: 'unavailable', message: 'ClamAV bulunamadı. Kurulum: sudo apt install clamav' }; const result = await run('clamscan', ['-r', '--infected', '--no-summary', target]); return { ok: result.ok, status: result.ok ? 'clean' : 'threat-or-error', message: result.ok ? 'ClamAV taraması temiz tamamlandı.' : 'Şüpheli dosya bulundu veya tarama hata verdi. Çıktıyı kontrol edin.', output: result.stdout + result.stderr }; }
-  return { ok: false, status: 'unavailable', message: 'Bu işletim sistemi için yerel tarayıcı entegrasyonu henüz yok.' };
-}
 ipcMain.handle('apps:list', () => detectApps());
 ipcMain.handle('apps:add', (_, item) => { const apps = readCustomApps(); const newItem = { ...item, id: `custom-${Date.now()}`, source: 'Özel', available: exists(item.executable) }; apps.push(newItem); writeCustomApps(apps); return newItem; });
 ipcMain.handle('apps:remove', (_, id) => { writeCustomApps(readCustomApps().filter(x => x.id !== id)); return true; });
 ipcMain.handle('apps:launch', (_, executable, protocol = false) => { if (!executable) return false; if (protocol || executable.startsWith('steam://')) shell.openExternal(executable); else if (isWin) execFile(executable, [], { detached: true }); else if (isMac) shell.openPath(executable); else execFile('sh', ['-c', `${executable} >/dev/null 2>&1 &`]); return true; });
 ipcMain.handle('security:scan', (_, target) => securityScan(target));
+ipcMain.handle('locale:load', (_, locale) => {
+  const safeLocale = supportedLocales.has(locale) ? locale : 'tr';
+  return JSON.parse(fs.readFileSync(path.join(__dirname, 'locales', `${safeLocale}.json`), 'utf8'));
+});
 ipcMain.handle('system:info', () => ({ platform: process.platform, release: os.release(), home: os.homedir() }));
 ipcMain.handle('shell:open', (_, target) => shell.openExternal(target));
 app.whenReady().then(() => { createWindow(); app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); }); });

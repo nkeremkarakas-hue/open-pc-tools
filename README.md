@@ -15,6 +15,7 @@ Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıc
 - Kullanıcı tanımlı özel yazılım ekleme
 - Cihazdaki Windows Defender veya Linux ClamAV ile kullanıcının seçtiği klasörü tarama
 - Türkçe / İngilizce arayüz seçimi
+- `src/locales/*.json` üzerinden genişletilebilir localization yapısı
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
 
@@ -50,6 +51,14 @@ npm run dev
 ```
 
 Kullanıcı verileri Electron'un uygulama veri klasöründe `apps.json` olarak saklanır.
+
+## Test
+
+```bash
+npm test
+```
+
+Antivirüs entegrasyonunun açıklaması, UI kütüphanesi seçenekleri ve localization mimarisi için [`docs/UI-AND-LOCALIZATION.md`](docs/UI-AND-LOCALIZATION.md) dosyasına bakın.
 
 ## Yol haritası
 
