@@ -2,18 +2,29 @@
 
 Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıcısı.
 
-> İlk sürüm: v0.1.0 — uygulama tarama, arama, kategori filtreleme, başlatma ve özel yazılım ekleme.
+> v0.2.0 — kurulu oyun kütüphanesi, yerel güvenlik taraması ve Türkçe/İngilizce dil seçimi.
 
 ## Özellikler
 
 - Windows'ta Steam, Epic Games Launcher, Discord ve VS Code algılama
-- Linux'ta `.desktop` uygulamalarını tarama
+- Steam kütüphanelerindeki **yasal olarak kurulmuş oyunları** otomatik listeleme ve `steam://rungameid` ile başlatma
+- Linux'ta `.desktop` uygulamalarını ve Steam oyunlarını tarama
 - macOS'ta `/Applications` ve kullanıcı uygulamalarını tarama
-- Arama ve kategori filtreleri
+- Arama, kategori filtreleri ve yenileme
 - Bulunan uygulamaları tek tıkla başlatma
 - Kullanıcı tanımlı özel yazılım ekleme
+- Cihazdaki Windows Defender veya Linux ClamAV ile kullanıcının seçtiği klasörü tarama
+- Türkçe / İngilizce arayüz seçimi
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
+
+## Güvenlik ve yasal kapsam
+
+Open PC Tools korsan, kırılmış veya lisanssız oyun indirme/dağıtma özelliği içermez. Oyunlar yalnızca kullanıcının cihazında yasal olarak kurulu olduklarında algılanır. Güvenlik taraması mevcut işletim sistemi tarayıcısını çağırır; uygulama kendi antivirüs motoru olduğunu iddia etmez.
+
+- Windows: Windows Defender (`Start-MpScan`)
+- Linux: ClamAV (`clamscan`); yoksa `sudo apt install clamav`
+- macOS: yerel üçüncü taraf tarayıcı entegrasyonu henüz eklenmedi
 
 ## Kurulum
 
@@ -38,17 +49,16 @@ npm run dist
 npm run dev
 ```
 
-Yeni mağaza entegrasyonları ve araçlar için `src/main.js` içindeki tarama katmanı genişletilebilir. Kullanıcı verileri Electron'un uygulama veri klasöründe `apps.json` olarak saklanır.
+Kullanıcı verileri Electron'un uygulama veri klasöründe `apps.json` olarak saklanır.
 
 ## Yol haritası
 
-- [ ] Steam kütüphanesi ve oyun kurulumlarını derinlemesine algılama
-- [ ] Epic, GOG, Ubisoft ve Xbox entegrasyonları
+- [ ] Epic, GOG, Ubisoft ve Xbox oyun kütüphaneleri
 - [ ] Save yedekleme/geri yükleme
 - [ ] Mod ve başlatma parametresi profilleri
 - [ ] Eklenti API'si
 - [ ] Otomatik güncelleme ve imzalı dağıtım paketleri
-- [ ] Türkçe/İngilizce dil dosyaları
+- [ ] macOS güvenlik tarayıcısı entegrasyonu
 
 ## Katkı
 
