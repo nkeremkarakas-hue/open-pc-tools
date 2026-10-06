@@ -1,6 +1,6 @@
 {
   "name": "open-pc-tools",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A cross-platform open-source launcher and tools hub for PC games and software.",
   "main": "src/main.js",
   "author": "Open PC Tools contributors",

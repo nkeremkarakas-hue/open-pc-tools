@@ -2,7 +2,7 @@
 
 Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıcısı.
 
-> v0.4.0 — çoklu mağaza bağlantı merkezi, profesyonel dashboard, yerel güvenlik durumu ve güvenli hesap yönetimi.
+> v0.5.0 — Steam Web API oyun saatleri, başarımlar, çoklu mağaza bağlantı merkezi ve güvenli hesap yönetimi.
 
 ## Özellikler
 
@@ -20,6 +20,7 @@ Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıc
 - Linux'ta shell kullanmadan güvenli uygulama başlatma
 - Steam hesap etiketlerini ve kullanıcı adlarını yönetme; parolaları OS güvenli kasasında şifreli saklama
 - Steam, Xbox/Microsoft, Epic, GOG, Ubisoft, EA, Battle.net, itch.io, Heroic ve Lutris için resmî bağlantı merkezi
+- Steam Web API ile oyun saatleri ve başarımları gösterme
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
 
@@ -67,6 +68,8 @@ Antivirüs entegrasyonunun açıklaması, UI kütüphanesi seçenekleri ve local
 Steam hesap kasasının güvenlik modeli için [`docs/STEAM-VAULT.md`](docs/STEAM-VAULT.md) dosyasına bakın.
 
 Çoklu mağaza bağlantılarının güvenli akışı için [`docs/STORE-CONNECTIONS.md`](docs/STORE-CONNECTIONS.md) dosyasına bakın.
+
+Steam oyun saatleri ve başarımlar için [`docs/STEAM-STATS.md`](docs/STEAM-STATS.md) dosyasına bakın.
 
 ## Yol haritası
 

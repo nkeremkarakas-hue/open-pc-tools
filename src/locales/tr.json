@@ -59,4 +59,16 @@
   "providerTitle": "Mağaza hesapları",
   "providerNote": "Bağlan düğmesi sağlayıcının resmî giriş sayfasını açar. Parolanız Open PC Tools’a gönderilmez.",
   "connect": "Resmî giriş"
+  ,"steamStats": "▤ Steam istatistikleri",
+  "statsKicker": "STEAM WEB API",
+  "statsTitle": "Oyun istatistikleri",
+  "statsNote": "API anahtarı ve SteamID64 yalnızca cihazındaki OS güvenli kasasında şifreli saklanır.",
+  "apiKey": "Steam Web API anahtarı",
+  "steamId": "SteamID64",
+  "loadStats": "İstatistikleri getir",
+  "saveApi": "Güvenli kaydet",
+  "statsSaved": "API ayarları güvenli kaydedildi.",
+  "statsNotConfigured": "Önce API ayarlarını kaydedin.",
+  "hours": "saat",
+  "achievements": "başarım"
 }

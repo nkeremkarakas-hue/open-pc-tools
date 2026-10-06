@@ -12,6 +12,9 @@ contextBridge.exposeInMainWorld('pcTools', {
   openSteam: () => ipcRenderer.invoke('vault:open-steam'),
   listProviders: () => ipcRenderer.invoke('providers:list'),
   openProviderLogin: (id) => ipcRenderer.invoke('providers:login', id),
+  steamApiStatus: () => ipcRenderer.invoke('steamapi:status'),
+  saveSteamApi: (config) => ipcRenderer.invoke('steamapi:save', config),
+  loadSteamStats: () => ipcRenderer.invoke('steamapi:stats'),
   loadLocale: (locale) => ipcRenderer.invoke('locale:load', locale),
   systemInfo: () => ipcRenderer.invoke('system:info'),
   openExternal: (url) => ipcRenderer.invoke('shell:open', url)

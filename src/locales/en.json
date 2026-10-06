@@ -59,4 +59,16 @@
   "providerTitle": "Store accounts",
   "providerNote": "Connect opens the provider’s official login page. Your password is never sent to Open PC Tools.",
   "connect": "Official login"
+  ,"steamStats": "▤ Steam statistics",
+  "statsKicker": "STEAM WEB API",
+  "statsTitle": "Game statistics",
+  "statsNote": "The API key and SteamID64 are encrypted in your device’s OS secure store.",
+  "apiKey": "Steam Web API key",
+  "steamId": "SteamID64",
+  "loadStats": "Load statistics",
+  "saveApi": "Save securely",
+  "statsSaved": "API settings saved securely.",
+  "statsNotConfigured": "Save API settings first.",
+  "hours": "hours",
+  "achievements": "achievements"
 }

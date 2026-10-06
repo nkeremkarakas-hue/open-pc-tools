@@ -10,6 +10,7 @@ const isLinux = process.platform === 'linux';
 const isMac = process.platform === 'darwin';
 const dataFile = path.join(app.getPath('userData'), 'apps.json');
 const vaultFile = path.join(app.getPath('userData'), 'steam-vault.json');
+const steamApiFile = path.join(app.getPath('userData'), 'steam-api.json');
 const supportedLocales = new Set(['tr', 'en']);
 const providers = [
   { id: 'steam', name: 'Steam', category: 'Store', loginUrl: 'https://store.steampowered.com/login/', launcher: 'steam://open/main' },
@@ -32,6 +33,8 @@ function readCustomApps() { try { return JSON.parse(fs.readFileSync(dataFile, 'u
 function writeCustomApps(apps) { fs.mkdirSync(path.dirname(dataFile), { recursive: true }); fs.writeFileSync(dataFile, JSON.stringify(apps, null, 2)); }
 function readVault() { try { return JSON.parse(fs.readFileSync(vaultFile, 'utf8')); } catch { return []; } }
 function writeVault(accounts) { fs.mkdirSync(path.dirname(vaultFile), { recursive: true }); fs.writeFileSync(vaultFile, JSON.stringify(accounts, null, 2), { mode: 0o600 }); try { fs.chmodSync(vaultFile, 0o600); } catch {} }
+function readSteamApi() { try { const value = JSON.parse(fs.readFileSync(steamApiFile, 'utf8')); return { key: safeStorage.decryptString(Buffer.from(value.key, 'base64')), steamId: value.steamId }; } catch { return null; } }
+function writeSteamApi(config) { fs.mkdirSync(path.dirname(steamApiFile), { recursive: true }); fs.writeFileSync(steamApiFile, JSON.stringify({ key: safeStorage.encryptString(config.key).toString('base64'), steamId: config.steamId, updatedAt: new Date().toISOString() }, null, 2), { mode: 0o600 }); try { fs.chmodSync(steamApiFile, 0o600); } catch {} }
 function exists(p) { try { return fs.existsSync(p); } catch { return false; } }
 function appItem(name, source, executable, category, note = '', extra = {}) { return { id: `${source}-${name}`.toLowerCase().replace(/[^a-z0-9]+/g, '-'), name, source, executable, category, note, available: exists(executable), ...extra }; }
 function parseSteamGames(libraryRoot) {
@@ -102,6 +105,17 @@ ipcMain.handle('vault:delete', (_, id) => { writeVault(readVault().filter(item =
 ipcMain.handle('vault:open-steam', () => { shell.openExternal('steam://open/main'); return true; });
 ipcMain.handle('providers:list', () => providers.map(({ id, name, category, loginUrl }) => ({ id, name, category, loginUrl })));
 ipcMain.handle('providers:login', (_, id) => { const provider = providers.find(item => item.id === id); if (!provider) return false; shell.openExternal(provider.loginUrl); return true; });
+ipcMain.handle('steamapi:status', () => ({ configured: Boolean(readSteamApi()), encryptionAvailable: safeStorage.isEncryptionAvailable() }));
+ipcMain.handle('steamapi:save', (_, config) => { if (!safeStorage.isEncryptionAvailable()) return { ok: false, message: 'OS güvenli kasası kullanılamıyor.' }; if (!/^[A-Za-z0-9]{20,}$/.test(config?.key || '') || !/^\d{10,20}$/.test(config?.steamId || '')) return { ok: false, message: 'Geçerli bir Steam Web API anahtarı ve SteamID64 girin.' }; writeSteamApi({ key: config.key, steamId: config.steamId }); return { ok: true }; });
+ipcMain.handle('steamapi:stats', async () => {
+  const config = readSteamApi(); if (!config) return { ok: false, status: 'not-configured', message: 'Önce Steam API ayarlarını kaydedin.' };
+  const params = new URLSearchParams({ key: config.key, steamid: config.steamId, format: 'json', include_appinfo: '1', include_played_free_games: '1' });
+  const response = await fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?${params}`);
+  if (!response.ok) return { ok: false, status: 'api-error', message: `Steam API HTTP ${response.status}` };
+  const data = await response.json(); const games = (data.response?.games || []).sort((a, b) => b.playtime_forever - a.playtime_forever).slice(0, 12);
+  const enriched = await Promise.all(games.map(async game => { try { const r = await fetch(`https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?${new URLSearchParams({ key: config.key, steamid: config.steamId, appid: String(game.appid) })}`); const d = r.ok ? await r.json() : {}; const stats = d.playerstats?.achievements || []; return { ...game, hours: Math.round((game.playtime_forever / 60) * 10) / 10, achievements: { earned: stats.filter(x => x.achieved === 1).length, total: stats.length } }; } catch { return { ...game, hours: Math.round((game.playtime_forever / 60) * 10) / 10, achievements: { earned: 0, total: 0 } }; } }));
+  return { ok: true, games: enriched, totalGames: data.response?.game_count || enriched.length, totalHours: Math.round(enriched.reduce((sum, game) => sum + game.hours, 0) * 10) / 10 };
+});
 ipcMain.handle('locale:load', (_, locale) => {
   const safeLocale = supportedLocales.has(locale) ? locale : 'tr';
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'locales', `${safeLocale}.json`), 'utf8'));
