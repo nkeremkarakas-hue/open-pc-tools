@@ -43,4 +43,15 @@
   "privacyNote": "Veriler cihazında kalır",
   "launchFailed": "Uygulama başlatılamadı.",
   "scanFinished": "Güvenlik taraması tamamlandı."
+  ,"steamVault": "▣ Steam hesap kasası",
+  "vaultKicker": "GÜVENLİ HESAP KASASI",
+  "vaultTitle": "Steam hesapları",
+  "vaultNote": "Şifreniz yalnızca işletim sisteminin güvenli kasasında şifreli olarak saklanır. Steam’e otomatik giriş yapılmaz; oturum açma Steam’in kendi ekranında tamamlanır.",
+  "accountLabel": "Hesap adı",
+  "username": "Steam kullanıcı adı",
+  "password": "Steam şifresi",
+  "saveAccount": "Güvenli kaydet",
+  "noAccounts": "Henüz kayıtlı Steam hesabı yok.",
+  "openSteam": "Steam’i aç",
+  "deleteAccount": "Sil"
 }

@@ -43,4 +43,15 @@
   "privacyNote": "Your data stays on device",
   "launchFailed": "The application could not be launched.",
   "scanFinished": "Security scan completed."
+  ,"steamVault": "▣ Steam account vault",
+  "vaultKicker": "SECURE ACCOUNT VAULT",
+  "vaultTitle": "Steam accounts",
+  "vaultNote": "Your password is encrypted by the operating system secure store. Steam login is never automated; sign-in is completed in Steam’s own screen.",
+  "accountLabel": "Account label",
+  "username": "Steam username",
+  "password": "Steam password",
+  "saveAccount": "Save securely",
+  "noAccounts": "No Steam accounts saved yet.",
+  "openSteam": "Open Steam",
+  "deleteAccount": "Delete"
 }

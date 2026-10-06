@@ -18,6 +18,7 @@ Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıc
 - `src/locales/*.json` üzerinden genişletilebilir localization yapısı
 - Dashboard istatistikleri, toast bildirimleri ve responsive görünüm
 - Linux'ta shell kullanmadan güvenli uygulama başlatma
+- Steam hesap etiketlerini ve kullanıcı adlarını yönetme; parolaları OS güvenli kasasında şifreli saklama
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
 
@@ -61,6 +62,8 @@ npm test
 ```
 
 Antivirüs entegrasyonunun açıklaması, UI kütüphanesi seçenekleri ve localization mimarisi için [`docs/UI-AND-LOCALIZATION.md`](docs/UI-AND-LOCALIZATION.md) dosyasına bakın.
+
+Steam hesap kasasının güvenlik modeli için [`docs/STEAM-VAULT.md`](docs/STEAM-VAULT.md) dosyasına bakın.
 
 ## Yol haritası
 

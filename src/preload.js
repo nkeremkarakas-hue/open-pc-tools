@@ -5,6 +5,11 @@ contextBridge.exposeInMainWorld('pcTools', {
   removeApp: (id) => ipcRenderer.invoke('apps:remove', id),
   launch: (executable, protocol) => ipcRenderer.invoke('apps:launch', executable, protocol),
   scan: (target) => ipcRenderer.invoke('security:scan', target),
+  vaultStatus: () => ipcRenderer.invoke('vault:status'),
+  listAccounts: () => ipcRenderer.invoke('vault:list'),
+  saveAccount: (account) => ipcRenderer.invoke('vault:save', account),
+  deleteAccount: (id) => ipcRenderer.invoke('vault:delete', id),
+  openSteam: () => ipcRenderer.invoke('vault:open-steam'),
   loadLocale: (locale) => ipcRenderer.invoke('locale:load', locale),
   systemInfo: () => ipcRenderer.invoke('system:info'),
   openExternal: (url) => ipcRenderer.invoke('shell:open', url)

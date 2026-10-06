@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, safeStorage } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -9,6 +9,7 @@ const isWin = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
 const isMac = process.platform === 'darwin';
 const dataFile = path.join(app.getPath('userData'), 'apps.json');
+const vaultFile = path.join(app.getPath('userData'), 'steam-vault.json');
 const supportedLocales = new Set(['tr', 'en']);
 
 function createWindow() {
@@ -17,6 +18,8 @@ function createWindow() {
 }
 function readCustomApps() { try { return JSON.parse(fs.readFileSync(dataFile, 'utf8')); } catch { return []; } }
 function writeCustomApps(apps) { fs.mkdirSync(path.dirname(dataFile), { recursive: true }); fs.writeFileSync(dataFile, JSON.stringify(apps, null, 2)); }
+function readVault() { try { return JSON.parse(fs.readFileSync(vaultFile, 'utf8')); } catch { return []; } }
+function writeVault(accounts) { fs.mkdirSync(path.dirname(vaultFile), { recursive: true }); fs.writeFileSync(vaultFile, JSON.stringify(accounts, null, 2), { mode: 0o600 }); try { fs.chmodSync(vaultFile, 0o600); } catch {} }
 function exists(p) { try { return fs.existsSync(p); } catch { return false; } }
 function appItem(name, source, executable, category, note = '', extra = {}) { return { id: `${source}-${name}`.toLowerCase().replace(/[^a-z0-9]+/g, '-'), name, source, executable, category, note, available: exists(executable), ...extra }; }
 function parseSteamGames(libraryRoot) {
@@ -73,6 +76,18 @@ ipcMain.handle('apps:add', (_, item) => { const apps = readCustomApps(); const n
 ipcMain.handle('apps:remove', (_, id) => { writeCustomApps(readCustomApps().filter(x => x.id !== id)); return true; });
 ipcMain.handle('apps:launch', (_, executable, protocol = false) => launchExecutable(executable, protocol));
 ipcMain.handle('security:scan', (_, target) => securityScan(target));
+ipcMain.handle('vault:status', () => ({ available: safeStorage.isEncryptionAvailable(), provider: process.platform === 'win32' ? 'Windows DPAPI' : process.platform === 'darwin' ? 'macOS Keychain' : 'Linux Secret Service' }));
+ipcMain.handle('vault:list', () => readVault().map(({ id, label, username, updatedAt }) => ({ id, label, username, updatedAt })));
+ipcMain.handle('vault:save', (_, account) => {
+  if (!safeStorage.isEncryptionAvailable()) return { ok: false, message: 'İşletim sistemi güvenli depolaması kullanılamıyor.' };
+  if (!account?.label || !account?.username || !account?.password) return { ok: false, message: 'Hesap adı, kullanıcı adı ve şifre zorunludur.' };
+  const accounts = readVault(); const id = account.id || `steam-${Date.now()}`;
+  const next = { id, label: account.label.trim(), username: account.username.trim(), password: safeStorage.encryptString(account.password), updatedAt: new Date().toISOString() };
+  writeVault([...accounts.filter(item => item.id !== id), next]);
+  return { ok: true, account: { id: next.id, label: next.label, username: next.username, updatedAt: next.updatedAt } };
+});
+ipcMain.handle('vault:delete', (_, id) => { writeVault(readVault().filter(item => item.id !== id)); return true; });
+ipcMain.handle('vault:open-steam', () => { shell.openExternal('steam://open/main'); return true; });
 ipcMain.handle('locale:load', (_, locale) => {
   const safeLocale = supportedLocales.has(locale) ? locale : 'tr';
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'locales', `${safeLocale}.json`), 'utf8'));
