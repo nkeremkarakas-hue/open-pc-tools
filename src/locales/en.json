@@ -71,4 +71,12 @@
   "statsNotConfigured": "Save API settings first.",
   "hours": "hours",
   "achievements": "achievements"
+  ,"donate": "♡ Support Open PC Tools",
+  "donationKicker": "SUPPORT",
+  "donationTitle": "Support via IBAN",
+  "donationNote": "Users in Türkiye can support the project by bank transfer via IBAN.",
+  "recipient": "Recipient",
+  "copyIban": "Copy IBAN",
+  "donationPlaceholder": "IBAN has not been configured yet.",
+  "ibanCopied": "IBAN copied."
 }

@@ -71,4 +71,12 @@
   "statsNotConfigured": "Önce API ayarlarını kaydedin.",
   "hours": "saat",
   "achievements": "başarım"
+  ,"donate": "♡ Open PC Tools'u destekle",
+  "donationKicker": "DESTEK",
+  "donationTitle": "IBAN ile destek ol",
+  "donationNote": "Türkiye’deki kullanıcılar IBAN üzerinden banka havalesi yapabilir.",
+  "recipient": "Alıcı",
+  "copyIban": "IBAN’ı kopyala",
+  "donationPlaceholder": "IBAN bilgisi henüz yapılandırılmadı.",
+  "ibanCopied": "IBAN kopyalandı."
 }

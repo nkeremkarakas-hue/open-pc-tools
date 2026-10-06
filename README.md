@@ -2,7 +2,7 @@
 
 Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıcısı.
 
-> v0.5.0 — Steam Web API oyun saatleri, başarımlar, çoklu mağaza bağlantı merkezi ve güvenli hesap yönetimi.
+> v0.6.0 — IBAN placeholder bağış paneli, Steam Web API oyun saatleri, başarımlar ve çoklu mağaza bağlantı merkezi.
 
 ## Özellikler
 
@@ -21,6 +21,7 @@ Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıc
 - Steam hesap etiketlerini ve kullanıcı adlarını yönetme; parolaları OS güvenli kasasında şifreli saklama
 - Steam, Xbox/Microsoft, Epic, GOG, Ubisoft, EA, Battle.net, itch.io, Heroic ve Lutris için resmî bağlantı merkezi
 - Steam Web API ile oyun saatleri ve başarımları gösterme
+- Türkiye için gerçek IBAN eklenene kadar placeholder kullanan bağış paneli
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
 
@@ -70,6 +71,8 @@ Steam hesap kasasının güvenlik modeli için [`docs/STEAM-VAULT.md`](docs/STEA
 Çoklu mağaza bağlantılarının güvenli akışı için [`docs/STORE-CONNECTIONS.md`](docs/STORE-CONNECTIONS.md) dosyasına bakın.
 
 Steam oyun saatleri ve başarımlar için [`docs/STEAM-STATS.md`](docs/STEAM-STATS.md) dosyasına bakın.
+
+IBAN bağış paneli için [`docs/DONATIONS.md`](docs/DONATIONS.md) dosyasına bakın.
 
 ## Yol haritası
 

@@ -11,6 +11,7 @@ const isMac = process.platform === 'darwin';
 const dataFile = path.join(app.getPath('userData'), 'apps.json');
 const vaultFile = path.join(app.getPath('userData'), 'steam-vault.json');
 const steamApiFile = path.join(app.getPath('userData'), 'steam-api.json');
+const donationFile = path.join(__dirname, 'config', 'donation.json');
 const supportedLocales = new Set(['tr', 'en']);
 const providers = [
   { id: 'steam', name: 'Steam', category: 'Store', loginUrl: 'https://store.steampowered.com/login/', launcher: 'steam://open/main' },
@@ -116,6 +117,7 @@ ipcMain.handle('steamapi:stats', async () => {
   const enriched = await Promise.all(games.map(async game => { try { const r = await fetch(`https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?${new URLSearchParams({ key: config.key, steamid: config.steamId, appid: String(game.appid) })}`); const d = r.ok ? await r.json() : {}; const stats = d.playerstats?.achievements || []; return { ...game, hours: Math.round((game.playtime_forever / 60) * 10) / 10, achievements: { earned: stats.filter(x => x.achieved === 1).length, total: stats.length } }; } catch { return { ...game, hours: Math.round((game.playtime_forever / 60) * 10) / 10, achievements: { earned: 0, total: 0 } }; } }));
   return { ok: true, games: enriched, totalGames: data.response?.game_count || enriched.length, totalHours: Math.round(enriched.reduce((sum, game) => sum + game.hours, 0) * 10) / 10 };
 });
+ipcMain.handle('donation:config', () => JSON.parse(fs.readFileSync(donationFile, 'utf8')));
 ipcMain.handle('locale:load', (_, locale) => {
   const safeLocale = supportedLocales.has(locale) ? locale : 'tr';
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'locales', `${safeLocale}.json`), 'utf8'));

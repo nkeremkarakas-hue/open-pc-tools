@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "method": "iban",
+  "recipientName": "Alıcı adı daha sonra eklenecek",
+  "iban": "IBAN_PLACEHOLDER_TO_BE_CONFIGURED",
+  "note": "Open PC Tools'u desteklemek için banka havalesi yapabilirsiniz.",
+  "otherMethods": {
+    "stripe": { "enabled": false },
+    "paypal": { "enabled": false },
+    "koFi": { "enabled": false }
+  }
+}
