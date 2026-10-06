@@ -79,4 +79,12 @@
   "copyIban": "Copy IBAN",
   "donationPlaceholder": "IBAN has not been configured yet.",
   "ibanCopied": "IBAN copied."
+  ,"profile": "◎ Profile",
+  "profileKicker": "LOCAL PROFILE",
+  "profileTitle": "User profile",
+  "profileNote": "The profile stays on this device; it contains no password or API key.",
+  "displayName": "Display name",
+  "avatar": "Avatar",
+  "saveProfile": "Save profile",
+  "checkUpdates": "↻ Check for updates"
 }

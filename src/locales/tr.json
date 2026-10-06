@@ -79,4 +79,12 @@
   "copyIban": "IBAN’ı kopyala",
   "donationPlaceholder": "IBAN bilgisi henüz yapılandırılmadı.",
   "ibanCopied": "IBAN kopyalandı."
+  ,"profile": "◎ Profil",
+  "profileKicker": "YEREL PROFİL",
+  "profileTitle": "Kullanıcı profili",
+  "profileNote": "Profil cihazında tutulur; parola veya API anahtarı içermez.",
+  "displayName": "Görünen ad",
+  "avatar": "Avatar",
+  "saveProfile": "Profili kaydet",
+  "checkUpdates": "↻ Güncellemeleri kontrol et"
 }

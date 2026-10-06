@@ -1,0 +1,12 @@
+const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const { createProfileStore } = require('../src/profile');
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'open-pc-profile-'));
+const store = createProfileStore(path.join(dir, 'profile.json'));
+const saved = store.save({ displayName: '  Kerem  ', avatar: 'K', language: 'en' });
+assert.strictEqual(saved.displayName, 'Kerem');
+assert.strictEqual(store.read().language, 'en');
+assert.strictEqual((fs.statSync(path.join(dir, 'profile.json')).mode & 0o777).toString(8), '600');
+console.log('profile tests passed');

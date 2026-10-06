@@ -4,6 +4,9 @@ const fs = require('fs');
 const os = require('os');
 const { execFile } = require('child_process');
 const { securityScan } = require('./security');
+const { normalizeGame, summarizeGames } = require('./steam-stats');
+const { createProfileStore } = require('./profile');
+const { autoUpdater } = require('electron-updater');
 
 const isWin = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
@@ -11,7 +14,10 @@ const isMac = process.platform === 'darwin';
 const dataFile = path.join(app.getPath('userData'), 'apps.json');
 const vaultFile = path.join(app.getPath('userData'), 'steam-vault.json');
 const steamApiFile = path.join(app.getPath('userData'), 'steam-api.json');
+const profileFile = path.join(app.getPath('userData'), 'profile.json');
 const donationFile = path.join(__dirname, 'config', 'donation.json');
+const profileStore = createProfileStore(profileFile);
+let updateState = { status: 'idle', version: app.getVersion(), message: '' };
 const supportedLocales = new Set(['tr', 'en']);
 const providers = [
   { id: 'steam', name: 'Steam', category: 'Store', loginUrl: 'https://store.steampowered.com/login/', launcher: 'steam://open/main' },
@@ -114,15 +120,19 @@ ipcMain.handle('steamapi:stats', async () => {
   const response = await fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?${params}`);
   if (!response.ok) return { ok: false, status: 'api-error', message: `Steam API HTTP ${response.status}` };
   const data = await response.json(); const games = (data.response?.games || []).sort((a, b) => b.playtime_forever - a.playtime_forever).slice(0, 12);
-  const enriched = await Promise.all(games.map(async game => { try { const r = await fetch(`https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?${new URLSearchParams({ key: config.key, steamid: config.steamId, appid: String(game.appid) })}`); const d = r.ok ? await r.json() : {}; const stats = d.playerstats?.achievements || []; return { ...game, hours: Math.round((game.playtime_forever / 60) * 10) / 10, achievements: { earned: stats.filter(x => x.achieved === 1).length, total: stats.length } }; } catch { return { ...game, hours: Math.round((game.playtime_forever / 60) * 10) / 10, achievements: { earned: 0, total: 0 } }; } }));
-  return { ok: true, games: enriched, totalGames: data.response?.game_count || enriched.length, totalHours: Math.round(enriched.reduce((sum, game) => sum + game.hours, 0) * 10) / 10 };
+  const enriched = await Promise.all(games.map(async game => { try { const r = await fetch(`https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?${new URLSearchParams({ key: config.key, steamid: config.steamId, appid: String(game.appid) })}`); const d = r.ok ? await r.json() : {}; return normalizeGame(game, d.playerstats?.achievements || []); } catch { return normalizeGame(game); } }));
+  return { ok: true, games: enriched, totalGames: data.response?.game_count || summarizeGames(games).totalGames, totalHours: summarizeGames(games).totalHours };
 });
 ipcMain.handle('donation:config', () => JSON.parse(fs.readFileSync(donationFile, 'utf8')));
+ipcMain.handle('profile:get', () => profileStore.read());
+ipcMain.handle('profile:save', (_, input) => profileStore.save(input));
+ipcMain.handle('update:check', async () => { if (!app.isPackaged) return { ...updateState, status: 'dev-mode', message: 'Geliştirme modunda güncelleme kontrolü yapılmaz.' }; try { await autoUpdater.checkForUpdates(); return updateState; } catch (error) { updateState = { ...updateState, status: 'error', message: error.message }; return updateState; } });
+ipcMain.handle('update:state', () => updateState);
 ipcMain.handle('locale:load', (_, locale) => {
   const safeLocale = supportedLocales.has(locale) ? locale : 'tr';
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'locales', `${safeLocale}.json`), 'utf8'));
 });
 ipcMain.handle('system:info', () => ({ platform: process.platform, release: os.release(), home: os.homedir() }));
 ipcMain.handle('shell:open', (_, target) => shell.openExternal(target));
-app.whenReady().then(() => { createWindow(); app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); }); });
+app.whenReady().then(() => { createWindow(); autoUpdater.autoDownload = false; autoUpdater.on('checking-for-update', () => { updateState = { ...updateState, status: 'checking', message: '' }; }); autoUpdater.on('update-available', info => { updateState = { ...updateState, status: 'available', version: info.version, message: 'Yeni sürüm bulundu.' }; }); autoUpdater.on('update-not-available', () => { updateState = { ...updateState, status: 'current', message: 'Uygulama güncel.' }; }); autoUpdater.on('error', error => { updateState = { ...updateState, status: 'error', message: error.message }; }); app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); }); });
 app.on('window-all-closed', () => { if (!isMac) app.quit(); });

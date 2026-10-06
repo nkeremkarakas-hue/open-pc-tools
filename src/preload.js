@@ -16,6 +16,10 @@ contextBridge.exposeInMainWorld('pcTools', {
   saveSteamApi: (config) => ipcRenderer.invoke('steamapi:save', config),
   loadSteamStats: () => ipcRenderer.invoke('steamapi:stats'),
   donationConfig: () => ipcRenderer.invoke('donation:config'),
+  getProfile: () => ipcRenderer.invoke('profile:get'),
+  saveProfile: (profile) => ipcRenderer.invoke('profile:save', profile),
+  checkForUpdates: () => ipcRenderer.invoke('update:check'),
+  updateState: () => ipcRenderer.invoke('update:state'),
   loadLocale: (locale) => ipcRenderer.invoke('locale:load', locale),
   systemInfo: () => ipcRenderer.invoke('system:info'),
   openExternal: (url) => ipcRenderer.invoke('shell:open', url)

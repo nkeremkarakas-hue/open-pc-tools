@@ -1,6 +1,6 @@
 {
   "name": "open-pc-tools",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A cross-platform open-source launcher and tools hub for PC games and software.",
   "main": "src/main.js",
   "author": "Open PC Tools contributors",
@@ -9,13 +9,14 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron .",
-    "test": "node test/security.test.js && node test/vault-contract.test.js",
+    "test": "node test/security.test.js && node test/vault-contract.test.js && node test/steam-stats.test.js && node test/profile.test.js",
     "build": "electron-builder --dir",
     "dist": "electron-builder"
   },
   "devDependencies": {
     "electron": "^33.2.1",
-    "electron-builder": "^25.1.8"
+    "electron-builder": "^25.1.8",
+    "electron-updater": "^6.3.9"
   },
   "build": {
     "appId": "io.openpctools.desktop",
@@ -23,6 +24,7 @@
     "files": ["src/**/*", "README.md", "LICENSE", "package.json"],
     "linux": { "target": ["AppImage", "deb"], "category": "Utility" },
     "win": { "target": ["nsis", "portable"] },
-    "mac": { "target": ["dmg"] }
+    "mac": { "target": ["dmg"] },
+    "publish": { "provider": "github", "owner": "nkeremkarakas-hue", "repo": "open-pc-tools", "releaseType": "release" }
   }
 }
