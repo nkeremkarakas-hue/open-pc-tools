@@ -53,5 +53,10 @@
   "saveAccount": "Güvenli kaydet",
   "noAccounts": "Henüz kayıtlı Steam hesabı yok.",
   "openSteam": "Steam’i aç",
-  "deleteAccount": "Sil"
+  "deleteAccount": "Sil",
+  "providerCenter": "◎ Mağaza bağlantıları",
+  "providerKicker": "RESMİ BAĞLANTILAR",
+  "providerTitle": "Mağaza hesapları",
+  "providerNote": "Bağlan düğmesi sağlayıcının resmî giriş sayfasını açar. Parolanız Open PC Tools’a gönderilmez.",
+  "connect": "Resmî giriş"
 }

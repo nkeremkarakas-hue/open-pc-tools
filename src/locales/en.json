@@ -53,5 +53,10 @@
   "saveAccount": "Save securely",
   "noAccounts": "No Steam accounts saved yet.",
   "openSteam": "Open Steam",
-  "deleteAccount": "Delete"
+  "deleteAccount": "Delete",
+  "providerCenter": "◎ Store connections",
+  "providerKicker": "OFFICIAL CONNECTIONS",
+  "providerTitle": "Store accounts",
+  "providerNote": "Connect opens the provider’s official login page. Your password is never sent to Open PC Tools.",
+  "connect": "Official login"
 }

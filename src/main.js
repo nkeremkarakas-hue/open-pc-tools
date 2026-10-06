@@ -11,6 +11,18 @@ const isMac = process.platform === 'darwin';
 const dataFile = path.join(app.getPath('userData'), 'apps.json');
 const vaultFile = path.join(app.getPath('userData'), 'steam-vault.json');
 const supportedLocales = new Set(['tr', 'en']);
+const providers = [
+  { id: 'steam', name: 'Steam', category: 'Store', loginUrl: 'https://store.steampowered.com/login/', launcher: 'steam://open/main' },
+  { id: 'xbox', name: 'Xbox / Microsoft', category: 'Store', loginUrl: 'https://account.microsoft.com/', launcher: 'ms-xbl-3d8b9300://home/' },
+  { id: 'epic', name: 'Epic Games', category: 'Store', loginUrl: 'https://www.epicgames.com/id/login', launcher: 'com.epicgames.launcher://apps' },
+  { id: 'gog', name: 'GOG', category: 'Store', loginUrl: 'https://auth.gog.com/login', launcher: 'goggalaxy://open' },
+  { id: 'ubisoft', name: 'Ubisoft Connect', category: 'Store', loginUrl: 'https://account.ubisoft.com/', launcher: 'uplay://open' },
+  { id: 'ea', name: 'EA app', category: 'Store', loginUrl: 'https://myaccount.ea.com/', launcher: 'origin2://launch' },
+  { id: 'battle-net', name: 'Battle.net', category: 'Store', loginUrl: 'https://account.blizzard.com/login', launcher: 'battlenet://' },
+  { id: 'itch', name: 'itch.io', category: 'Store', loginUrl: 'https://itch.io/login', launcher: 'itchio://' },
+  { id: 'heroic', name: 'Heroic Games Launcher', category: 'Launcher', loginUrl: 'https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher', launcher: 'heroic://' },
+  { id: 'lutris', name: 'Lutris', category: 'Launcher', loginUrl: 'https://lutris.net/', launcher: 'lutris://' }
+];
 
 function createWindow() {
   const win = new BrowserWindow({ width: 1280, height: 820, minWidth: 980, minHeight: 640, backgroundColor: '#0b0f17', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false } });
@@ -88,6 +100,8 @@ ipcMain.handle('vault:save', (_, account) => {
 });
 ipcMain.handle('vault:delete', (_, id) => { writeVault(readVault().filter(item => item.id !== id)); return true; });
 ipcMain.handle('vault:open-steam', () => { shell.openExternal('steam://open/main'); return true; });
+ipcMain.handle('providers:list', () => providers.map(({ id, name, category, loginUrl }) => ({ id, name, category, loginUrl })));
+ipcMain.handle('providers:login', (_, id) => { const provider = providers.find(item => item.id === id); if (!provider) return false; shell.openExternal(provider.loginUrl); return true; });
 ipcMain.handle('locale:load', (_, locale) => {
   const safeLocale = supportedLocales.has(locale) ? locale : 'tr';
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'locales', `${safeLocale}.json`), 'utf8'));

@@ -2,7 +2,7 @@
 
 Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıcısı.
 
-> v0.3.0 — profesyonel dashboard, yerel güvenlik durumu, bildirimler, güvenli başlatma ve Türkçe/İngilizce dil seçimi.
+> v0.4.0 — çoklu mağaza bağlantı merkezi, profesyonel dashboard, yerel güvenlik durumu ve güvenli hesap yönetimi.
 
 ## Özellikler
 
@@ -19,6 +19,7 @@ Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıc
 - Dashboard istatistikleri, toast bildirimleri ve responsive görünüm
 - Linux'ta shell kullanmadan güvenli uygulama başlatma
 - Steam hesap etiketlerini ve kullanıcı adlarını yönetme; parolaları OS güvenli kasasında şifreli saklama
+- Steam, Xbox/Microsoft, Epic, GOG, Ubisoft, EA, Battle.net, itch.io, Heroic ve Lutris için resmî bağlantı merkezi
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
 
@@ -64,6 +65,8 @@ npm test
 Antivirüs entegrasyonunun açıklaması, UI kütüphanesi seçenekleri ve localization mimarisi için [`docs/UI-AND-LOCALIZATION.md`](docs/UI-AND-LOCALIZATION.md) dosyasına bakın.
 
 Steam hesap kasasının güvenlik modeli için [`docs/STEAM-VAULT.md`](docs/STEAM-VAULT.md) dosyasına bakın.
+
+Çoklu mağaza bağlantılarının güvenli akışı için [`docs/STORE-CONNECTIONS.md`](docs/STORE-CONNECTIONS.md) dosyasına bakın.
 
 ## Yol haritası
 

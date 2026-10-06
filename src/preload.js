@@ -10,6 +10,8 @@ contextBridge.exposeInMainWorld('pcTools', {
   saveAccount: (account) => ipcRenderer.invoke('vault:save', account),
   deleteAccount: (id) => ipcRenderer.invoke('vault:delete', id),
   openSteam: () => ipcRenderer.invoke('vault:open-steam'),
+  listProviders: () => ipcRenderer.invoke('providers:list'),
+  openProviderLogin: (id) => ipcRenderer.invoke('providers:login', id),
   loadLocale: (locale) => ipcRenderer.invoke('locale:load', locale),
   systemInfo: () => ipcRenderer.invoke('system:info'),
   openExternal: (url) => ipcRenderer.invoke('shell:open', url)
