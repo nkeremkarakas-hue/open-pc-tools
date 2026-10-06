@@ -2,7 +2,7 @@
 
 Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıcısı.
 
-> v0.2.0 — kurulu oyun kütüphanesi, yerel güvenlik taraması ve Türkçe/İngilizce dil seçimi.
+> v0.3.0 — profesyonel dashboard, yerel güvenlik durumu, bildirimler, güvenli başlatma ve Türkçe/İngilizce dil seçimi.
 
 ## Özellikler
 
@@ -16,6 +16,8 @@ Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıc
 - Cihazdaki Windows Defender veya Linux ClamAV ile kullanıcının seçtiği klasörü tarama
 - Türkçe / İngilizce arayüz seçimi
 - `src/locales/*.json` üzerinden genişletilebilir localization yapısı
+- Dashboard istatistikleri, toast bildirimleri ve responsive görünüm
+- Linux'ta shell kullanmadan güvenli uygulama başlatma
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
 

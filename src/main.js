@@ -60,10 +60,18 @@ function detectApps() {
   }
   return [...new Map([...list, ...readCustomApps()].map(item => [item.id, item])).values()];
 }
+function launchExecutable(executable, protocol = false) {
+  if (!executable) return false;
+  if (protocol || executable.startsWith('steam://')) { shell.openExternal(executable); return true; }
+  if (isWin) { execFile(executable, [], { detached: true, windowsHide: true }); return true; }
+  if (isMac) { shell.openPath(executable); return true; }
+  execFile(executable, [], { detached: true, windowsHide: true });
+  return true;
+}
 ipcMain.handle('apps:list', () => detectApps());
 ipcMain.handle('apps:add', (_, item) => { const apps = readCustomApps(); const newItem = { ...item, id: `custom-${Date.now()}`, source: 'Özel', available: exists(item.executable) }; apps.push(newItem); writeCustomApps(apps); return newItem; });
 ipcMain.handle('apps:remove', (_, id) => { writeCustomApps(readCustomApps().filter(x => x.id !== id)); return true; });
-ipcMain.handle('apps:launch', (_, executable, protocol = false) => { if (!executable) return false; if (protocol || executable.startsWith('steam://')) shell.openExternal(executable); else if (isWin) execFile(executable, [], { detached: true }); else if (isMac) shell.openPath(executable); else execFile('sh', ['-c', `${executable} >/dev/null 2>&1 &`]); return true; });
+ipcMain.handle('apps:launch', (_, executable, protocol = false) => launchExecutable(executable, protocol));
 ipcMain.handle('security:scan', (_, target) => securityScan(target));
 ipcMain.handle('locale:load', (_, locale) => {
   const safeLocale = supportedLocales.has(locale) ? locale : 'tr';

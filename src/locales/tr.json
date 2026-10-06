@@ -34,5 +34,13 @@
   "count": "yazılım",
   "ready": "hazır",
   "enterPath": "Bir klasör yolu girin.",
-  "scanInProgress": "Tarama çalışıyor…"
+  "scanInProgress": "Tarama çalışıyor…",
+  "totalInstalled": "Toplam yazılım",
+  "installedGames": "Kurulu oyun",
+  "protected": "Hazır",
+  "securityStatus": "Güvenlik durumu",
+  "localFirst": "Local-first",
+  "privacyNote": "Veriler cihazında kalır",
+  "launchFailed": "Uygulama başlatılamadı.",
+  "scanFinished": "Güvenlik taraması tamamlandı."
 }

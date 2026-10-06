@@ -34,5 +34,13 @@
   "count": "software",
   "ready": "ready",
   "enterPath": "Enter a folder path.",
-  "scanInProgress": "Scan in progress…"
+  "scanInProgress": "Scan in progress…",
+  "totalInstalled": "Total software",
+  "installedGames": "Installed games",
+  "protected": "Ready",
+  "securityStatus": "Security status",
+  "localFirst": "Local-first",
+  "privacyNote": "Your data stays on device",
+  "launchFailed": "The application could not be launched.",
+  "scanFinished": "Security scan completed."
 }
