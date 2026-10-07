@@ -37,6 +37,7 @@
 - GitHub Releases tabanlı güncelleme kontrolü
 - Türkiye için IBAN placeholder bağış paneli
 - Türkçe ve İngilizce arayüz
+- Güvenli oyun performans profilleri ve Türkçe yama kaynak araması
 
 ## Kurulum
 

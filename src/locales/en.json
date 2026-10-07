@@ -87,4 +87,15 @@
   "avatar": "Avatar",
   "saveProfile": "Save profile",
   "checkUpdates": "↻ Check for updates"
+  ,"performance": "◌ Game performance",
+  "performanceKicker": "GAME PERFORMANCE",
+  "performanceTitle": "Performance center",
+  "performanceNote": "Provides safe recommendations; it never changes BIOS, drivers or system files automatically.",
+  "recommended": "Recommended profile",
+  "performanceTips": "Safe performance recommendations"
+  ,"translations": "文 Turkish patches",
+  "translationKicker": "LOCALIZATION",
+  "translationTitle": "Find Turkish patches",
+  "translationNote": "Download patches only from authorized and trusted sources. Open PC Tools never downloads or installs files automatically.",
+  "translationPlaceholder": "Enter a game name"
 }

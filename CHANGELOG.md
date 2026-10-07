@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.9.0
+
+- Atomic yerel veri deposu ve bozuk dosya için `.bak` kurtarma kopyası eklendi.
+- Profil, hesap kasası, uygulama listesi ve Steam API ayarları güvenli yazma akışına taşındı.
+- Güvenli oyun performans profilleri ve platforma göre öneri merkezi eklendi.
+- Türkçe yama arama merkezi; web, Nexus Mods, ModDB ve PCGamingWiki kaynaklarıyla eklendi.
+- Yama dosyaları otomatik indirilmez veya kurulmaz; kullanıcı onayı ve kaynak kontrolü korunur.
+- Ürün kalite yol haritası başlatıldı.
+
 ## v0.8.0
 
 - Bağış IBAN yapılandırması normalize ve doğrulanabilir hâle getirildi.

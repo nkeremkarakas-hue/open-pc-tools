@@ -2,7 +2,7 @@
 
 Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıcısı.
 
-> v0.8.0 — güçlendirilmiş güvenlik, yapılandırma doğrulaması, ağ zaman aşımı koruması ve daha güvenilir bağış/API akışı.
+> v0.9.0 — ürün kalite temeli, atomic veri deposu, güçlendirilmiş güvenlik ve ağ güvenilirliği.
 
 ## Özellikler
 
@@ -27,6 +27,8 @@ Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıc
 - Güvenli IBAN biçimlendirme ve placeholder doğrulaması
 - Steam API çağrılarında zaman aşımı ve ağ hatası yönetimi
 - Antivirüs motoru tespitinde shell çağrısı kullanmama
+- Rekabetçi, dengeli ve yüksek kalite oyun performans profilleri
+- Türkçe yama arama merkezi: Web, Nexus Mods, ModDB ve PCGamingWiki
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
 

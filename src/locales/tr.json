@@ -87,4 +87,15 @@
   "avatar": "Avatar",
   "saveProfile": "Profili kaydet",
   "checkUpdates": "↻ Güncellemeleri kontrol et"
+  ,"performance": "◌ Oyun performansı",
+  "performanceKicker": "OYUN PERFORMANSI",
+  "performanceTitle": "Performans merkezi",
+  "performanceNote": "Güvenli öneriler sunar; BIOS, sürücü veya sistem dosyalarını otomatik değiştirmez.",
+  "recommended": "Önerilen profil",
+  "performanceTips": "Güvenli performans önerileri"
+  ,"translations": "文 Türkçe yamalar",
+  "translationKicker": "YERELLEŞTİRME",
+  "translationTitle": "Türkçe yama ara",
+  "translationNote": "Yama dosyalarını yalnızca izinli ve güvenilir kaynaklardan indirin. Open PC Tools otomatik indirme veya kurulum yapmaz.",
+  "translationPlaceholder": "Oyun adı yazın"
 }

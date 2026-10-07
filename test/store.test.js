@@ -1,0 +1,13 @@
+const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const { atomicWrite, readJson } = require('../src/store');
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'open-pc-store-'));
+const file = path.join(dir, 'data.json');
+atomicWrite(file, { version: 1 }, 0o600);
+atomicWrite(file, { version: 2 }, 0o600);
+assert.deepStrictEqual(readJson(file, {}), { version: 2 });
+assert.deepStrictEqual(readJson(`${dir}/missing.json`, { empty: true }), { empty: true });
+assert.ok(fs.existsSync(`${file}.bak`));
+console.log('atomic store tests passed');

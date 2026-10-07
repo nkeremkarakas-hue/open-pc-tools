@@ -20,6 +20,9 @@ contextBridge.exposeInMainWorld('pcTools', {
   saveProfile: (profile) => ipcRenderer.invoke('profile:save', profile),
   checkForUpdates: () => ipcRenderer.invoke('update:check'),
   updateState: () => ipcRenderer.invoke('update:state'),
+  performanceProfiles: () => ipcRenderer.invoke('performance:profiles'),
+  performanceRecommend: (system) => ipcRenderer.invoke('performance:recommend', system),
+  searchTranslation: (gameName, source) => ipcRenderer.invoke('translation:search', gameName, source),
   loadLocale: (locale) => ipcRenderer.invoke('locale:load', locale),
   systemInfo: () => ipcRenderer.invoke('system:info'),
   openExternal: (url) => ipcRenderer.invoke('shell:open', url)

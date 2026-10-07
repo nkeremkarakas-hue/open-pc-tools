@@ -8,6 +8,8 @@ const { normalizeGame, summarizeGames } = require('./steam-stats');
 const { createProfileStore } = require('./profile');
 const { autoUpdater } = require('electron-updater');
 const { validateDonationConfig, validateSteamConfig } = require('./validation');
+const { atomicWrite, readJson } = require('./store');
+const { getPerformanceProfiles, recommendPerformance } = require('./performance');
 
 const isWin = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
@@ -38,12 +40,12 @@ function createWindow() {
   const win = new BrowserWindow({ width: 1280, height: 820, minWidth: 980, minHeight: 640, backgroundColor: '#0b0f17', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false } });
   win.loadFile(path.join(__dirname, 'index.html'));
 }
-function readCustomApps() { try { return JSON.parse(fs.readFileSync(dataFile, 'utf8')); } catch { return []; } }
-function writeCustomApps(apps) { fs.mkdirSync(path.dirname(dataFile), { recursive: true }); fs.writeFileSync(dataFile, JSON.stringify(apps, null, 2)); }
-function readVault() { try { return JSON.parse(fs.readFileSync(vaultFile, 'utf8')); } catch { return []; } }
-function writeVault(accounts) { fs.mkdirSync(path.dirname(vaultFile), { recursive: true }); fs.writeFileSync(vaultFile, JSON.stringify(accounts, null, 2), { mode: 0o600 }); try { fs.chmodSync(vaultFile, 0o600); } catch {} }
-function readSteamApi() { try { const value = JSON.parse(fs.readFileSync(steamApiFile, 'utf8')); return { key: safeStorage.decryptString(Buffer.from(value.key, 'base64')), steamId: value.steamId }; } catch { return null; } }
-function writeSteamApi(config) { fs.mkdirSync(path.dirname(steamApiFile), { recursive: true }); fs.writeFileSync(steamApiFile, JSON.stringify({ key: safeStorage.encryptString(config.key).toString('base64'), steamId: config.steamId, updatedAt: new Date().toISOString() }, null, 2), { mode: 0o600 }); try { fs.chmodSync(steamApiFile, 0o600); } catch {} }
+function readCustomApps() { return readJson(dataFile, []); }
+function writeCustomApps(apps) { atomicWrite(dataFile, apps, 0o600); }
+function readVault() { return readJson(vaultFile, []); }
+function writeVault(accounts) { atomicWrite(vaultFile, accounts, 0o600); }
+function readSteamApi() { try { const value = readJson(steamApiFile, null); return value ? { key: safeStorage.decryptString(Buffer.from(value.key, 'base64')), steamId: value.steamId } : null; } catch { return null; } }
+function writeSteamApi(config) { atomicWrite(steamApiFile, { key: safeStorage.encryptString(config.key).toString('base64'), steamId: config.steamId, updatedAt: new Date().toISOString() }, 0o600); }
 function exists(p) { try { return fs.existsSync(p); } catch { return false; } }
 function appItem(name, source, executable, category, note = '', extra = {}) { return { id: `${source}-${name}`.toLowerCase().replace(/[^a-z0-9]+/g, '-'), name, source, executable, category, note, available: exists(executable), ...extra }; }
 function parseSteamGames(libraryRoot) {
@@ -132,6 +134,14 @@ ipcMain.handle('profile:get', () => profileStore.read());
 ipcMain.handle('profile:save', (_, input) => profileStore.save(input));
 ipcMain.handle('update:check', async () => { if (!app.isPackaged) return { ...updateState, status: 'dev-mode', message: 'Geliştirme modunda güncelleme kontrolü yapılmaz.' }; try { await autoUpdater.checkForUpdates(); return updateState; } catch (error) { updateState = { ...updateState, status: 'error', message: error.message }; return updateState; } });
 ipcMain.handle('update:state', () => updateState);
+ipcMain.handle('performance:profiles', () => getPerformanceProfiles());
+ipcMain.handle('performance:recommend', (_, system = {}) => recommendPerformance(system));
+ipcMain.handle('translation:search', (_, gameName, source = 'web') => {
+  const query = String(gameName || '').trim(); if (!query || query.length > 120) return { ok: false, message: 'Geçerli bir oyun adı girin.' };
+  const encoded = encodeURIComponent(`${query} Türkçe yama`);
+  const urls = { web: `https://www.google.com/search?q=${encoded}`, nexus: `https://www.nexusmods.com/search/?gsearch=${encodeURIComponent(query)}&gsearchtype=mods`, moddb: `https://www.moddb.com/search?q=${encodeURIComponent(query)}`, pcgw: `https://www.pcgamingwiki.com/w/index.php?search=${encodeURIComponent(query)}` };
+  if (!urls[source]) return { ok: false, message: 'Desteklenmeyen kaynak.' }; shell.openExternal(urls[source]); return { ok: true, source };
+});
 ipcMain.handle('locale:load', (_, locale) => {
   const safeLocale = supportedLocales.has(locale) ? locale : 'tr';
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'locales', `${safeLocale}.json`), 'utf8'));
