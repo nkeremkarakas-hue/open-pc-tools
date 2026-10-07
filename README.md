@@ -78,6 +78,8 @@ IBAN bağış paneli için [`docs/DONATIONS.md`](docs/DONATIONS.md) dosyasına b
 
 Profil, auto-updater ve Steam testleri için [`docs/PROFILE-AND-UPDATES.md`](docs/PROFILE-AND-UPDATES.md) dosyasına bakın.
 
+Kullanıcılar için ayrıntılı Türkçe kullanım kılavuzu: [`guide/USER-GUIDE-v0.7.0.md`](guide/USER-GUIDE-v0.7.0.md). PDF sürümü de aynı klasördedir.
+
 ## Yol haritası
 
 - [ ] Epic, GOG, Ubisoft ve Xbox oyun kütüphaneleri
