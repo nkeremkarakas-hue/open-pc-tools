@@ -2,7 +2,7 @@
 
 Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıcısı.
 
-> v0.7.0 — yerel profil yönetimi, GitHub Releases auto-updater ve test edilmiş Steam Web API istatistikleri.
+> v0.8.0 — güçlendirilmiş güvenlik, yapılandırma doğrulaması, ağ zaman aşımı koruması ve daha güvenilir bağış/API akışı.
 
 ## Özellikler
 
@@ -24,6 +24,9 @@ Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıc
 - Türkiye için gerçek IBAN eklenene kadar placeholder kullanan bağış paneli
 - Cihazda tutulan kullanıcı profili ve profil tercihleri
 - GitHub Releases tabanlı auto-updater yapılandırması
+- Güvenli IBAN biçimlendirme ve placeholder doğrulaması
+- Steam API çağrılarında zaman aşımı ve ağ hatası yönetimi
+- Antivirüs motoru tespitinde shell çağrısı kullanmama
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
 

@@ -19,7 +19,7 @@ async function securityScan(target, platform = process.platform) {
     return { ok: result.ok, status: result.ok ? 'clean-or-complete' : 'error', message: result.ok ? 'Windows Defender taraması tamamlandı.' : result.error };
   }
   if (platform === 'linux') {
-    const clamscan = await run('sh', ['-c', 'command -v clamscan']);
+    const clamscan = await run('clamscan', ['--version']);
     if (!clamscan.ok) return { ok: false, status: 'unavailable', message: 'ClamAV bulunamadı. Kurulum: sudo apt install clamav' };
     const result = await run('clamscan', ['-r', '--infected', '--no-summary', target]);
     return { ok: result.ok, status: result.ok ? 'clean' : 'threat-or-error', message: result.ok ? 'ClamAV taraması temiz tamamlandı.' : 'Şüpheli dosya bulundu veya tarama hata verdi.', output: result.stdout + result.stderr };

@@ -10,5 +10,8 @@ const { securityScan } = require('../src/security');
   assert.equal(current.status, 'unavailable');
   assert.match(current.message, /macOS/i);
 
+  const linuxResult = await securityScan(__dirname, 'linux');
+  assert.ok(['unavailable', 'clean', 'threat-or-error'].includes(linuxResult.status));
+
   console.log('security tests passed');
 })().catch(error => { console.error(error); process.exit(1); });

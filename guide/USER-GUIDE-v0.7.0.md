@@ -271,6 +271,9 @@ Masaüstü Secret Service/libsecret sağlayıcısının aktif olduğundan emin o
 - Gerçek IBAN ve ödeme bilgileri repoya eklenmemiştir.
 - Sağlayıcı girişleri resmî sayfalara yönlendirilir.
 - Uygulama korsan oyun, crack veya lisanssız indirme sağlamaz.
+- v0.8.0 ile IBAN biçimi doğrulanır; placeholder değerler kopyalanamaz.
+- Steam API çağrıları ağ zaman aşımına karşı korunur.
+- Linux ClamAV tespiti shell komutu çalıştırmadan yapılır.
 
 ## Test komutu
 

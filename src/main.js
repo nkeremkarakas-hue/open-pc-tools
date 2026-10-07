@@ -7,6 +7,7 @@ const { securityScan } = require('./security');
 const { normalizeGame, summarizeGames } = require('./steam-stats');
 const { createProfileStore } = require('./profile');
 const { autoUpdater } = require('electron-updater');
+const { validateDonationConfig, validateSteamConfig } = require('./validation');
 
 const isWin = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
@@ -114,17 +115,19 @@ ipcMain.handle('vault:open-steam', () => { shell.openExternal('steam://open/main
 ipcMain.handle('providers:list', () => providers.map(({ id, name, category, loginUrl }) => ({ id, name, category, loginUrl })));
 ipcMain.handle('providers:login', (_, id) => { const provider = providers.find(item => item.id === id); if (!provider) return false; shell.openExternal(provider.loginUrl); return true; });
 ipcMain.handle('steamapi:status', () => ({ configured: Boolean(readSteamApi()), encryptionAvailable: safeStorage.isEncryptionAvailable() }));
-ipcMain.handle('steamapi:save', (_, config) => { if (!safeStorage.isEncryptionAvailable()) return { ok: false, message: 'OS güvenli kasası kullanılamıyor.' }; if (!/^[A-Za-z0-9]{20,}$/.test(config?.key || '') || !/^\d{10,20}$/.test(config?.steamId || '')) return { ok: false, message: 'Geçerli bir Steam Web API anahtarı ve SteamID64 girin.' }; writeSteamApi({ key: config.key, steamId: config.steamId }); return { ok: true }; });
+ipcMain.handle('steamapi:save', (_, config) => { if (!safeStorage.isEncryptionAvailable()) return { ok: false, message: 'OS güvenli kasası kullanılamıyor.' }; if (!validateSteamConfig(config)) return { ok: false, message: 'Geçerli bir Steam Web API anahtarı ve SteamID64 girin.' }; writeSteamApi({ key: config.key.trim(), steamId: config.steamId.trim() }); return { ok: true }; });
 ipcMain.handle('steamapi:stats', async () => {
   const config = readSteamApi(); if (!config) return { ok: false, status: 'not-configured', message: 'Önce Steam API ayarlarını kaydedin.' };
-  const params = new URLSearchParams({ key: config.key, steamid: config.steamId, format: 'json', include_appinfo: '1', include_played_free_games: '1' });
-  const response = await fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?${params}`);
-  if (!response.ok) return { ok: false, status: 'api-error', message: `Steam API HTTP ${response.status}` };
-  const data = await response.json(); const games = (data.response?.games || []).sort((a, b) => b.playtime_forever - a.playtime_forever).slice(0, 12);
-  const enriched = await Promise.all(games.map(async game => { try { const r = await fetch(`https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?${new URLSearchParams({ key: config.key, steamid: config.steamId, appid: String(game.appid) })}`); const d = r.ok ? await r.json() : {}; return normalizeGame(game, d.playerstats?.achievements || []); } catch { return normalizeGame(game); } }));
-  return { ok: true, games: enriched, totalGames: data.response?.game_count || summarizeGames(games).totalGames, totalHours: summarizeGames(games).totalHours };
+  try {
+    const params = new URLSearchParams({ key: config.key, steamid: config.steamId, format: 'json', include_appinfo: '1', include_played_free_games: '1' });
+    const response = await fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?${params}`, { signal: AbortSignal.timeout(15000) });
+    if (!response.ok) return { ok: false, status: 'api-error', message: `Steam API HTTP ${response.status}` };
+    const data = await response.json(); const games = (data.response?.games || []).sort((a, b) => b.playtime_forever - a.playtime_forever).slice(0, 12);
+    const enriched = await Promise.all(games.map(async game => { try { const r = await fetch(`https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?${new URLSearchParams({ key: config.key, steamid: config.steamId, appid: String(game.appid) })}`, { signal: AbortSignal.timeout(10000) }); const d = r.ok ? await r.json() : {}; return normalizeGame(game, d.playerstats?.achievements || []); } catch { return normalizeGame(game); } }));
+    return { ok: true, games: enriched, totalGames: data.response?.game_count || summarizeGames(games).totalGames, totalHours: summarizeGames(games).totalHours };
+  } catch (error) { return { ok: false, status: 'network-error', message: `Steam API bağlantısı başarısız: ${error.name === 'TimeoutError' ? 'zaman aşımı' : 'ağ hatası'}` }; }
 });
-ipcMain.handle('donation:config', () => { try { const base = JSON.parse(fs.readFileSync(donationFile, 'utf8')); const local = JSON.parse(fs.readFileSync(localDonationFile, 'utf8')); return { ...base, ...local, iban: local.iban || base.iban, recipientName: local.recipientName || base.recipientName, note: local.note || base.note }; } catch { return JSON.parse(fs.readFileSync(donationFile, 'utf8')); } });
+ipcMain.handle('donation:config', () => { try { const base = JSON.parse(fs.readFileSync(donationFile, 'utf8')); let local = {}; try { local = JSON.parse(fs.readFileSync(localDonationFile, 'utf8')); } catch {} return validateDonationConfig({ ...base, ...local }); } catch { return validateDonationConfig({}); } });
 ipcMain.handle('profile:get', () => profileStore.read());
 ipcMain.handle('profile:save', (_, input) => profileStore.save(input));
 ipcMain.handle('update:check', async () => { if (!app.isPackaged) return { ...updateState, status: 'dev-mode', message: 'Geliştirme modunda güncelleme kontrolü yapılmaz.' }; try { await autoUpdater.checkForUpdates(); return updateState; } catch (error) { updateState = { ...updateState, status: 'error', message: error.message }; return updateState; } });
