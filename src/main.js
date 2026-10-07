@@ -16,6 +16,7 @@ const vaultFile = path.join(app.getPath('userData'), 'steam-vault.json');
 const steamApiFile = path.join(app.getPath('userData'), 'steam-api.json');
 const profileFile = path.join(app.getPath('userData'), 'profile.json');
 const donationFile = path.join(__dirname, 'config', 'donation.json');
+const localDonationFile = path.join(app.getPath('userData'), 'donation.local.json');
 const profileStore = createProfileStore(profileFile);
 let updateState = { status: 'idle', version: app.getVersion(), message: '' };
 const supportedLocales = new Set(['tr', 'en']);
@@ -123,7 +124,7 @@ ipcMain.handle('steamapi:stats', async () => {
   const enriched = await Promise.all(games.map(async game => { try { const r = await fetch(`https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?${new URLSearchParams({ key: config.key, steamid: config.steamId, appid: String(game.appid) })}`); const d = r.ok ? await r.json() : {}; return normalizeGame(game, d.playerstats?.achievements || []); } catch { return normalizeGame(game); } }));
   return { ok: true, games: enriched, totalGames: data.response?.game_count || summarizeGames(games).totalGames, totalHours: summarizeGames(games).totalHours };
 });
-ipcMain.handle('donation:config', () => JSON.parse(fs.readFileSync(donationFile, 'utf8')));
+ipcMain.handle('donation:config', () => { try { const base = JSON.parse(fs.readFileSync(donationFile, 'utf8')); const local = JSON.parse(fs.readFileSync(localDonationFile, 'utf8')); return { ...base, ...local, iban: local.iban || base.iban, recipientName: local.recipientName || base.recipientName, note: local.note || base.note }; } catch { return JSON.parse(fs.readFileSync(donationFile, 'utf8')); } });
 ipcMain.handle('profile:get', () => profileStore.read());
 ipcMain.handle('profile:save', (_, input) => profileStore.save(input));
 ipcMain.handle('update:check', async () => { if (!app.isPackaged) return { ...updateState, status: 'dev-mode', message: 'Geliştirme modunda güncelleme kontrolü yapılmaz.' }; try { await autoUpdater.checkForUpdates(); return updateState; } catch (error) { updateState = { ...updateState, status: 'error', message: error.message }; return updateState; } });

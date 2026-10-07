@@ -3,3 +3,5 @@ dist/
 .DS_Store
 *.log
 .env
+src/config/donation.local.json
+guide/private/
