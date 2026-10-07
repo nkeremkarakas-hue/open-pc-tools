@@ -98,4 +98,10 @@
   "translationTitle": "Türkçe yama ara",
   "translationNote": "Yama dosyalarını yalnızca izinli ve güvenilir kaynaklardan indirin. Open PC Tools otomatik indirme veya kurulum yapmaz.",
   "translationPlaceholder": "Oyun adı yazın"
+  ,"music": "♫ Arka plan müziği",
+  "musicKicker": "YEREL SES",
+  "musicTitle": "Arka plan müziği",
+  "musicNote": "Kendi ses dosyalarınızı seçin; müzik oyun açıldıktan sonra arka planda çalabilir.",
+  "addMusic": "＋ Müzik ekle",
+  "noMusic": "Henüz müzik eklenmedi."
 }

@@ -98,4 +98,10 @@
   "translationTitle": "Find Turkish patches",
   "translationNote": "Download patches only from authorized and trusted sources. Open PC Tools never downloads or installs files automatically.",
   "translationPlaceholder": "Enter a game name"
+  ,"music": "♫ Background music",
+  "musicKicker": "LOCAL AUDIO",
+  "musicTitle": "Background music",
+  "musicNote": "Choose your own audio files; music can play in the background while a game is running.",
+  "addMusic": "＋ Add music",
+  "noMusic": "No music added yet."
 }

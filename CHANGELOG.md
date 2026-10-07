@@ -6,6 +6,7 @@
 - Profil, hesap kasası, uygulama listesi ve Steam API ayarları güvenli yazma akışına taşındı.
 - Güvenli oyun performans profilleri ve platforma göre öneri merkezi eklendi.
 - Türkçe yama arama merkezi; web, Nexus Mods, ModDB ve PCGamingWiki kaynaklarıyla eklendi.
+- Kullanıcının kendi MP3/OGG/WAV/M4A/FLAC/WebM dosyalarını seçebileceği arka plan müzik oynatıcısı eklendi.
 - Yama dosyaları otomatik indirilmez veya kurulmaz; kullanıcı onayı ve kaynak kontrolü korunur.
 - Ürün kalite yol haritası başlatıldı.
 

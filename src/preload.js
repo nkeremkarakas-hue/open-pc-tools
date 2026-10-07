@@ -23,6 +23,9 @@ contextBridge.exposeInMainWorld('pcTools', {
   performanceProfiles: () => ipcRenderer.invoke('performance:profiles'),
   performanceRecommend: (system) => ipcRenderer.invoke('performance:recommend', system),
   searchTranslation: (gameName, source) => ipcRenderer.invoke('translation:search', gameName, source),
+  listMusic: () => ipcRenderer.invoke('music:list'),
+  pickMusic: () => ipcRenderer.invoke('music:pick'),
+  removeMusic: (id) => ipcRenderer.invoke('music:remove', id),
   loadLocale: (locale) => ipcRenderer.invoke('locale:load', locale),
   systemInfo: () => ipcRenderer.invoke('system:info'),
   openExternal: (url) => ipcRenderer.invoke('shell:open', url)

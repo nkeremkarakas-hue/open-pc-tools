@@ -29,6 +29,7 @@ Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıc
 - Antivirüs motoru tespitinde shell çağrısı kullanmama
 - Rekabetçi, dengeli ve yüksek kalite oyun performans profilleri
 - Türkçe yama arama merkezi: Web, Nexus Mods, ModDB ve PCGamingWiki
+- Kullanıcının seçtiği yerel müzik dosyalarıyla arka plan oynatıcısı
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
 
@@ -84,6 +85,8 @@ IBAN bağış paneli için [`docs/DONATIONS.md`](docs/DONATIONS.md) dosyasına b
 Gerçek IBAN’ı public GitHub’a koymadan cihazda yapılandırmak için [`docs/DONATION-SETUP-TR.md`](docs/DONATION-SETUP-TR.md) dosyasına bakın.
 
 Profil, auto-updater ve Steam testleri için [`docs/PROFILE-AND-UPDATES.md`](docs/PROFILE-AND-UPDATES.md) dosyasına bakın.
+
+Yerel arka plan müzik oynatıcısı için [`docs/MUSIC-PLAYER.md`](docs/MUSIC-PLAYER.md) dosyasına bakın.
 
 Kullanıcılar için ayrıntılı Türkçe kullanım kılavuzu: [`guide/USER-GUIDE-v0.7.0.md`](guide/USER-GUIDE-v0.7.0.md). PDF sürümü de aynı klasördedir.
 

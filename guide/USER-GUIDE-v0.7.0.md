@@ -38,6 +38,7 @@
 - Türkiye için IBAN placeholder bağış paneli
 - Türkçe ve İngilizce arayüz
 - Güvenli oyun performans profilleri ve Türkçe yama kaynak araması
+- Kullanıcının seçtiği yerel müzik dosyalarıyla arka plan oynatıcısı
 
 ## Kurulum
 

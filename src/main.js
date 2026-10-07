@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell, safeStorage } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, safeStorage, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -10,6 +10,7 @@ const { autoUpdater } = require('electron-updater');
 const { validateDonationConfig, validateSteamConfig } = require('./validation');
 const { atomicWrite, readJson } = require('./store');
 const { getPerformanceProfiles, recommendPerformance } = require('./performance');
+const { createMusicStore, supported: supportedAudio } = require('./music');
 
 const isWin = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
@@ -20,6 +21,7 @@ const steamApiFile = path.join(app.getPath('userData'), 'steam-api.json');
 const profileFile = path.join(app.getPath('userData'), 'profile.json');
 const donationFile = path.join(__dirname, 'config', 'donation.json');
 const localDonationFile = path.join(app.getPath('userData'), 'donation.local.json');
+const musicStore = createMusicStore(path.join(app.getPath('userData'), 'music.json'));
 const profileStore = createProfileStore(profileFile);
 let updateState = { status: 'idle', version: app.getVersion(), message: '' };
 const supportedLocales = new Set(['tr', 'en']);
@@ -142,6 +144,9 @@ ipcMain.handle('translation:search', (_, gameName, source = 'web') => {
   const urls = { web: `https://www.google.com/search?q=${encoded}`, nexus: `https://www.nexusmods.com/search/?gsearch=${encodeURIComponent(query)}&gsearchtype=mods`, moddb: `https://www.moddb.com/search?q=${encodeURIComponent(query)}`, pcgw: `https://www.pcgamingwiki.com/w/index.php?search=${encodeURIComponent(query)}` };
   if (!urls[source]) return { ok: false, message: 'Desteklenmeyen kaynak.' }; shell.openExternal(urls[source]); return { ok: true, source };
 });
+ipcMain.handle('music:list', () => musicStore.list());
+ipcMain.handle('music:pick', async () => { const result = await dialog.showOpenDialog({ title: 'Müzik dosyaları seç', properties: ['openFile', 'multiSelections'], filters: [{ name: 'Ses dosyaları', extensions: [...supportedAudio].map(ext => ext.slice(1)) }] }); if (result.canceled) return []; return musicStore.add(result.filePaths); });
+ipcMain.handle('music:remove', (_, id) => musicStore.remove(id));
 ipcMain.handle('locale:load', (_, locale) => {
   const safeLocale = supportedLocales.has(locale) ? locale : 'tr';
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'locales', `${safeLocale}.json`), 'utf8'));
