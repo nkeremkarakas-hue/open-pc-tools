@@ -104,4 +104,20 @@
   "musicNote": "Kendi ses dosyalarınızı seçin; müzik oyun açıldıktan sonra arka planda çalabilir.",
   "addMusic": "＋ Müzik ekle",
   "noMusic": "Henüz müzik eklenmedi."
+  ,"gameRecords": "▤ Oyun kayıtları",
+  "systemPerformance": "⌁ Sistem performansı",
+  "recordsKicker": "GEÇMİŞ",
+  "recordsTitle": "Oyun kayıtları",
+  "clearRecords": "Kayıtları temizle",
+  "noRecords": "Henüz oyun başlatma kaydı yok.",
+  "systemKicker": "DONANIM",
+  "systemTitle": "Sistem performansı",
+  "systemNote": "Sıcaklık sensörleri platforma göre değişir. Bellek yıpranması ve çip kalitesi güvenilir biçimde ölçülemiyorsa gösterilmez.",
+  "memoryUsed": "Bellek kullanımı",
+  "memoryFree": "Boş bellek",
+  "cpuCores": "CPU çekirdeği",
+  "temperature": "Sıcaklık",
+  "memoryWear": "Bellek yıpranması",
+  "chipQuality": "Çip kalitesi",
+  "notAvailable": "Ölçülemiyor"
 }

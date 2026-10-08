@@ -104,4 +104,20 @@
   "musicNote": "Choose your own audio files; music can play in the background while a game is running.",
   "addMusic": "＋ Add music",
   "noMusic": "No music added yet."
+  ,"gameRecords": "▤ Game history",
+  "systemPerformance": "⌁ System performance",
+  "recordsKicker": "HISTORY",
+  "recordsTitle": "Game history",
+  "clearRecords": "Clear history",
+  "noRecords": "No game launch records yet.",
+  "systemKicker": "HARDWARE",
+  "systemTitle": "System performance",
+  "systemNote": "Temperature sensors vary by platform. Memory wear and chip quality are not shown when they cannot be measured reliably.",
+  "memoryUsed": "Memory used",
+  "memoryFree": "Free memory",
+  "cpuCores": "CPU cores",
+  "temperature": "Temperature",
+  "memoryWear": "Memory wear",
+  "chipQuality": "Chip quality",
+  "notAvailable": "Not measurable"
 }

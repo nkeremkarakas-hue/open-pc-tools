@@ -26,6 +26,11 @@ contextBridge.exposeInMainWorld('pcTools', {
   listMusic: () => ipcRenderer.invoke('music:list'),
   pickMusic: () => ipcRenderer.invoke('music:pick'),
   removeMusic: (id) => ipcRenderer.invoke('music:remove', id),
+  recordGame: (input) => ipcRenderer.invoke('games:record', input),
+  gameRecords: () => ipcRenderer.invoke('games:records'),
+  clearGameRecords: () => ipcRenderer.invoke('games:clear-records'),
+  systemSnapshot: () => ipcRenderer.invoke('system:snapshot'),
+  gamePrice: (appid) => ipcRenderer.invoke('game:price', appid),
   loadLocale: (locale) => ipcRenderer.invoke('locale:load', locale),
   systemInfo: () => ipcRenderer.invoke('system:info'),
   openExternal: (url) => ipcRenderer.invoke('shell:open', url)

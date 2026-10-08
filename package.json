@@ -9,7 +9,7 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron .",
-    "test": "node test/security.test.js && node test/vault-contract.test.js && node test/steam-stats.test.js && node test/profile.test.js && node test/validation.test.js && node test/store.test.js && node test/performance.test.js && node test/music.test.js",
+    "test": "node test/security.test.js && node test/vault-contract.test.js && node test/steam-stats.test.js && node test/profile.test.js && node test/validation.test.js && node test/store.test.js && node test/performance.test.js && node test/music.test.js && node test/game-system.test.js",
     "build": "electron-builder --dir",
     "dist": "electron-builder"
   },

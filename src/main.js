@@ -11,6 +11,8 @@ const { validateDonationConfig, validateSteamConfig } = require('./validation');
 const { atomicWrite, readJson } = require('./store');
 const { getPerformanceProfiles, recommendPerformance } = require('./performance');
 const { createMusicStore, supported: supportedAudio } = require('./music');
+const { createGameRecords } = require('./game-records');
+const { snapshot: systemSnapshot } = require('./system-monitor');
 
 const isWin = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
@@ -22,6 +24,7 @@ const profileFile = path.join(app.getPath('userData'), 'profile.json');
 const donationFile = path.join(__dirname, 'config', 'donation.json');
 const localDonationFile = path.join(app.getPath('userData'), 'donation.local.json');
 const musicStore = createMusicStore(path.join(app.getPath('userData'), 'music.json'));
+const gameRecords = createGameRecords(path.join(app.getPath('userData'), 'game-records.json'));
 const profileStore = createProfileStore(profileFile);
 let updateState = { status: 'idle', version: app.getVersion(), message: '' };
 const supportedLocales = new Set(['tr', 'en']);
@@ -59,7 +62,7 @@ function parseSteamGames(libraryRoot) {
       const appid = (text.match(/"appid"\s+"(\d+)"/) || [])[1];
       const name = (text.match(/"name"\s+"([^\n"]+)"/) || [])[1];
       if (!appid || !name) return null;
-      return { id: `steam-game-${appid}`, name, source: 'Steam', executable: `steam://rungameid/${appid}`, category: 'Oyun', note: 'Kurulu oyun', available: true, protocol: true };
+      return { id: `steam-game-${appid}`, appid: Number(appid), name, source: 'Steam', executable: `steam://rungameid/${appid}`, category: 'Oyun', note: 'Kurulu oyun', available: true, protocol: true };
     } catch { return null; }
   }).filter(Boolean);
 }
@@ -147,6 +150,14 @@ ipcMain.handle('translation:search', (_, gameName, source = 'web') => {
 ipcMain.handle('music:list', () => musicStore.list());
 ipcMain.handle('music:pick', async () => { const result = await dialog.showOpenDialog({ title: 'Müzik dosyaları seç', properties: ['openFile', 'multiSelections'], filters: [{ name: 'Ses dosyaları', extensions: [...supportedAudio].map(ext => ext.slice(1)) }] }); if (result.canceled) return []; return musicStore.add(result.filePaths); });
 ipcMain.handle('music:remove', (_, id) => musicStore.remove(id));
+ipcMain.handle('games:record', (_, input) => gameRecords.record(input));
+ipcMain.handle('games:records', () => gameRecords.list());
+ipcMain.handle('games:clear-records', () => gameRecords.clear());
+ipcMain.handle('system:snapshot', () => systemSnapshot());
+ipcMain.handle('game:price', async (_, appid) => {
+  if (!/^\d+$/.test(String(appid || ''))) return { ok: false, message: 'Geçersiz oyun kimliği.' };
+  try { const response = await fetch(`https://store.steampowered.com/api/appdetails?appids=${appid}&cc=tr&l=turkish`, { signal: AbortSignal.timeout(10000) }); const json = await response.json(); const data = json[appid]?.data; if (!response.ok || !data) return { ok: false, message: 'Fiyat bilgisi bulunamadı.' }; return { ok: true, name: data.name, price: data.is_free ? 'Ücretsiz' : (data.price_overview?.final_formatted || 'Fiyat mağazada görülebilir.'), url: `https://store.steampowered.com/app/${appid}/?cc=tr&l=turkish` }; } catch { return { ok: false, message: 'Steam fiyat bilgisine ulaşılamadı.' }; }
+});
 ipcMain.handle('locale:load', (_, locale) => {
   const safeLocale = supportedLocales.has(locale) ? locale : 'tr';
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'locales', `${safeLocale}.json`), 'utf8'));

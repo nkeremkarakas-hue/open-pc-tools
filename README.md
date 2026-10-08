@@ -30,6 +30,9 @@ Windows, Linux ve macOS için açık kaynaklı oyun ve PC yazılımı başlatıc
 - Rekabetçi, dengeli ve yüksek kalite oyun performans profilleri
 - Türkçe yama arama merkezi: Web, Nexus Mods, ModDB ve PCGamingWiki
 - Kullanıcının seçtiği yerel müzik dosyalarıyla arka plan oynatıcısı
+- Oyun başlatma geçmişi ve yerel kayıtlar
+- Steam Türkiye mağaza fiyatı sorgusu
+- CPU, bellek, çalışma süresi ve erişilebilir sıcaklık sensörü izleme
 - Electron güvenlik modeli: `contextIsolation` açık, renderer'da Node erişimi kapalı
 - Windows, Linux ve macOS için paketleme yapılandırması
 
@@ -87,6 +90,8 @@ Gerçek IBAN’ı public GitHub’a koymadan cihazda yapılandırmak için [`doc
 Profil, auto-updater ve Steam testleri için [`docs/PROFILE-AND-UPDATES.md`](docs/PROFILE-AND-UPDATES.md) dosyasına bakın.
 
 Yerel arka plan müzik oynatıcısı için [`docs/MUSIC-PLAYER.md`](docs/MUSIC-PLAYER.md) dosyasına bakın.
+
+Oyun kayıtları, fiyatlar ve sistem ölçümleri için [`docs/GAME-RECORDS-PRICES-SYSTEM.md`](docs/GAME-RECORDS-PRICES-SYSTEM.md) dosyasına bakın.
 
 Kullanıcılar için ayrıntılı Türkçe kullanım kılavuzu: [`guide/USER-GUIDE-v0.7.0.md`](guide/USER-GUIDE-v0.7.0.md). PDF sürümü de aynı klasördedir.
 
